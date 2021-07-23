@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- 引入 layui.css -->
+    <link rel="stylesheet" href="//unpkg.com/layui@2.6.8/dist/css/layui.css">
+    <!-- 引入 layui.js -->
+    <script src="//unpkg.com/layui@2.6.8/dist/layui.js"></script>
+    <title>Welcome</title>
+</head>
+<body>
+<% include top/top.ejs%>
+<div class="layui-container">
+<h1 id="head_name"></h1>
+<p>Welcome to this page</p>
+<p>token is: </p> <p id="token_value"> </p>
+<button type="button" class="layui-btn layui-btn-radius" id="token_test_btn">token测试</button>
+<p id="token_result"></p>
+</div>
+</body>
+<script>
+    document.getElementById("token_value").innerHTML = localStorage.getItem("token")
+    layui.use('jquery', function () {
+        let $ = layui.jquery
+        $('#head_name').html(localStorage.getItem("nickname"))
+        $('#token_test_btn').on('click', function () {
+            $.ajax({
+                type: "get",
+                url: "http://localhost:8080/test/tokenTest",
+                headers: { token: localStorage.getItem("token")},
+                dataType: "json",
+                success: function (res) {
+                    if (res.code === '200') {
+                        $("#token_result").html(res.data)
+                    } else {
+                        console.log(res)
+                    }
+                }
+            });
+        })
+    })
+</script>
+</html>
