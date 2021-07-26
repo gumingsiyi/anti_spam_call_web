@@ -29,7 +29,7 @@
                 headers: { token: localStorage.getItem("token")},
                 dataType: "json",
                 success: function (res) {
-                    if (res.code === '200') {
+                    if (res.code === 200) {
                         $("#token_result").html(res.data)
                     } else {
                         console.log(res)
