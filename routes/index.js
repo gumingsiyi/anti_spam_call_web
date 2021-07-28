@@ -14,4 +14,7 @@ module.exports = function(app) {
   app.get('/success', function (req, res) {
     res.render('success');
   });
+  app.get('/config' ,function(req, res) {
+    res.render('modelConfig')
+  })
 };

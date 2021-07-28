@@ -7,7 +7,7 @@
     <!-- 引入 layui.js -->
     <script src="//unpkg.com/layui@2.6.8/dist/layui.js"></script>
     <meta charset="UTF-8">
-    <title>管理员登录</title>
+    <title>防骚扰-管理员登录</title>
 </head>
 <body>
     <% include top/top.ejs%>
@@ -19,12 +19,16 @@
                 <form class="layui-form" action="" style="margin-right: 100px; margin-top: 60px; width: 500px">
                     <div class="layui-form-item">
                         <div class="layui-input-block">
-                            <input type="text" style="border-radius: 15px;height: 60px;font-size: 16px" name="username" required  lay-verify="required" placeholder="  管理员 ID" autocomplete="off" class="layui-input">
+                            <label>
+                                <input type="text" style="border-radius: 15px;height: 60px;font-size: 16px; padding-left: 20px" name="username" required lay-verify="required" placeholder="管理员 ID" autocomplete="off" class="layui-input">
+                            </label>
                         </div>
                     </div>
                     <div class="layui-form-item">
                         <div class="layui-input-block">
-                            <input type="password" style="border-radius: 15px;height: 60px;font-size: 16px" name="password" required lay-verify="required" placeholder="  密码" autocomplete="off" class="layui-input">
+                            <label>
+                                <input type="password" style="border-radius: 15px;height: 60px;font-size: 16px; padding-left: 20px;" name="password" required lay-verify="required" placeholder="密码" autocomplete="off" class="layui-input">
+                            </label>
                         </div>
                         <div>
                             <h6 id="pwd_waring" style="margin-left: 130px;margin-top: 5px;color: crimson" hidden><i class="layui-icon"></i>&#10006; ID或密码错误</h6>
@@ -32,7 +36,7 @@
                     </div>
                     <div class="layui-form-item" style="margin-top: 50px">
                         <div class="layui-input-block">
-                            <button class="layui-btn layui-btn-fluid layui-btn-normal" style="border-radius: 15px; height: 60px; background: #0d6eda;font-size: 16px" lay-submit lay-filter="form_submit">登 录</button>
+                            <button class="layui-btn layui-btn-fluid layui-btn-normal" style="border-radius: 15px; height: 60px; background: #0d6eda;font-size: 16px" lay-submit lay-filter="form_submit">登 录</button
                         </div>
                     </div>
                 </form>
@@ -47,6 +51,7 @@
         var $ = layui.jquery;
         //监听提交
         form.on('submit(form_submit)', function(data){
+          console.log(data)
             $.ajax({
                 type: "post",
                 url: "http://localhost:8080/admin/login",
