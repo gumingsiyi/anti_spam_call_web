@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="//unpkg.com/layui@2.6.8/dist/css/layui.css">
+    <script src="//unpkg.com/layui@2.6.8/dist/layui.js"></script>
+    <title>黑白名单设置</title>
+</head>
+<body>
+<% include top/top.ejs %>
+<div class="layui-container">
+    <h1 id="head_name"></h1>
+    <p>Welcome to this page</p>
+    <p>token is: </p>
+    <p id="token_value"></p>
+    <button type="button" class="layui-btn layui-btn-radius" id="token_test_btn">token测试</button>
+    <button type="button" class="layui-btn layui-btn-radius" id="get_test_btn">get测试</button>
+    <button type="button" class="layui-btn layui-btn-radius" id="config_btn">模型设置</button>
+    <p id="token_result"></p>
+    <p id="get_result"></p>
+</div>
+</body>

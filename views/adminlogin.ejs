@@ -34,7 +34,7 @@
                     </div>
                     <div class="layui-form-item" style="margin-top: 50px">
                         <div class="layui-input-block">
-                            <button class="layui-btn layui-btn-fluid layui-btn-normal" style="border-radius: 15px; height: 60px; background: #0d6eda;font-size: 16px" lay-submit lay-filter="form_submit">登 录</button
+                            <button class="layui-btn layui-btn-fluid layui-btn-normal" style="border-radius: 15px; height: 60px; background: #0d6eda;font-size: 16px" lay-submit lay-filter="form_submit">登 录</button>
                         </div>
                     </div>
                 </form>
@@ -43,7 +43,6 @@
 </body>
 
 <script>
-    //Demo
     layui.use(['form', 'jquery'], function(){
         var form = layui.form;
         var $ = layui.jquery;
@@ -52,7 +51,7 @@
           console.log(data)
             $.ajax({
                 type: "post",
-                url: "http://localhost:8080/admin/login",
+                url: "http://<%= server_host %>/admin/login",
                 data: JSON.stringify(data.field),
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",

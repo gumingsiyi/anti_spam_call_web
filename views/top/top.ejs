@@ -7,8 +7,16 @@
         </ul>
     </div>
     <div class="layui-col-xs8">
-        <ul class="layui-nav" lay-filter="" style="text-align: right; border-radius: 0">
-            <li class="layui-nav-item" style="text-align: left"><a id="login_status" href=""></a></li>
+        <ul class="layui-nav" lay-filter="" style="text-align: right; border-radius: 0; padding-right: 100px">
+            <li id="login_status" class="layui-nav-item">
+                <a id="username" href=""></a>
+                <dl class="layui-nav-child" style="text-align: center"> <!-- 二级菜单 -->
+                    <dd><a href="/base_config">基础模型设置</a></dd>
+                    <dd><a href="">后台模版</a></dd>
+                    <dd><div style="background-color: black"></div></dd>
+                    <dd><a id="logout_btn" href="">注销</a></dd>
+                </dl>
+            </li>
         </ul>
     </div>
 </div>
@@ -17,14 +25,13 @@
     layui.use('jquery', function () {
         let $ = layui.jquery;
         if (localStorage.getItem('token') === null) {
-            $('#login_status').html('未登录')
+            $('#login_status').html('<a id="login_status" href="">未登录</a>')
             if (window.location.pathname !== '/login') {
                 window.location.href = '/login'
             }
         } else {
-            $('#login_status')
-                .html(localStorage.getItem('nickname'))
-                .append('<dl class="layui-nav-child"><dd><a id="logout_btn">注销</a></dd></dl>')
+            $('#username')
+                .html(localStorage.getItem('nickname')+'<i class="layui-icon layui-icon-down layui-nav-more"/>')
         }
 
         $('#logout_btn').on('click', function () {
