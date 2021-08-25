@@ -20,5 +20,7 @@ module.exports = function(app) {
   app.get('/base_config' ,function(req, res) {
     res.render('baseModelConfig', { server_host: server_host })
   })
-
+  app.get('/details', function(req, res) {
+    res.render('details', { server_host: server_host })
+  })
 };

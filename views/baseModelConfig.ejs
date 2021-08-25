@@ -7,7 +7,7 @@
     <title>防骚扰-基础模型设置</title>
 </head>
 <body>
-<% include top/top.ejs%>
+<% include top/top.ejs %>
 <div class="layui-container">
     <form class="layui-form" action="">
         <table class="layui-table" style="width: 800px; margin-left: 50px; margin-right: 50px; margin-top: 50px">
@@ -75,10 +75,13 @@
             &#10006; ID或密码错误
         </div>
         <div class="layui-input-block" style="margin-top: 30px">
-            <button class="layui-btn layui-btn-radius" style="border-radius: 10px; height: 50px;font-size: 16px;margin-right: 20px" lay-submit lay-filter="form_submit">
+            <button class="layui-btn layui-btn-radius"
+                    style="border-radius: 10px; height: 50px;font-size: 16px;margin-right: 20px" lay-submit
+                    lay-filter="form_submit">
                 <i class="layui-icon layui-icon-ok"></i> 提 交
             </button>
-            <button class="layui-btn layui-btn-radius layui-btn-warm" style="border-radius: 10px; height: 50px;font-size: 16px" lay-submit lay-filter="edit_btn">
+            <button class="layui-btn layui-btn-radius layui-btn-warm"
+                    style="border-radius: 10px; height: 50px;font-size: 16px" lay-submit lay-filter="edit_btn">
                 <i class="layui-icon layui-icon-edit"></i> 编 辑
             </button>
         </div>
@@ -87,77 +90,77 @@
 </div>
 </body>
 <script>
-  layui.use(function() {
-    let form = layui.form;
-    let $ = layui.jquery;
-    $.ajax({
-      type: "get",
-      url: "http://<%= server_host %>/model/getBaseModel",
-      headers: {token: localStorage.getItem('token')},
-      success: function (res) {
-        if (res.code === 200) {
-          for(let key in res.data.config) {
-            if (key !== "name") {
-              if (res.data.config.hasOwnProperty(key)) {
-                if (res.data.config[key] !== null)
-                  $('[name="'+key+'"]').val(res.data.config[key]);
-              }
+    layui.use(function () {
+        let form = layui.form;
+        let $ = layui.jquery;
+        $.ajax({
+            type: 'get',
+            url: "http://<%= server_host %>/model/getBaseModel",
+            headers: {token: localStorage.getItem('token')},
+            success: function (res) {
+                if (res.code === 200) {
+                    for (let key in res.data.config) {
+                        if (key !== 'name') {
+                            if (res.data.config.hasOwnProperty(key)) {
+                                if (res.data.config[key] !== null)
+                                    $('[name="' + key + '"]').val(res.data.config[key]);
+                            }
+                        }
+                    }
+                } else {
+                    $('#waring_msg').html('&#10006; 登录鉴权有误，请重新<a href="/login">登录</a>');
+                }
+            },
+        });
+
+        form.on('submit(form_submit)', function (data) {
+            console.log(data.field);
+            if (Math.abs(sum(data.field) - 1.0) > Number.EPSILON) {
+                $('#waring_msg').html('&#10006; 权重之和必须为1.0').show();
+                return false;
             }
-          }
-        } else {
-          $('#waring_msg').html('&#10006; 登录鉴权有误，请重新<a href="/login">登录</a>')
-        }
-      }
-    });
-
-    form.on('submit(form_submit)', function(data){
-      console.log(data.field)
-      if (Math.abs(sum(data.field) - 1.0) > Number.EPSILON) {
-        $('#waring_msg').html('&#10006; 权重之和必须为1.0').show();
-        return false;
-      }
-      if (data.field.switchRate7Days >= 1.0 || data.field.answerRate7Days >= 1.0) {
-        $('#waring_msg').html('&#10006; 概率必须小于等于1.0').show();
-        return false;
-      }
-      let post_info = {config: data.field}
-      $.ajax({
-        type: "post",
-        url: "http://<%= server_host %>/model/setBaseModel",
-        data: JSON.stringify(post_info),
-        headers: {token: localStorage.getItem('token')},
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        success: function (res) {
-          console.log(res)
-          if(res.data.result === true) {
-            layer.msg("更新成功！")
-            $('input').each(function() {
-              $(this).attr('disabled', true);
+            if (data.field.switchRate7Days >= 1.0 || data.field.answerRate7Days >= 1.0) {
+                $('#waring_msg').html('&#10006; 概率必须小于等于1.0').show();
+                return false;
+            }
+            let post_info = {config: data.field};
+            $.ajax({
+                type: 'post',
+                url: "http://<%= server_host %>/model/setBaseModel",
+                data: JSON.stringify(post_info),
+                headers: {token: localStorage.getItem('token')},
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function (res) {
+                    console.log(res);
+                    if (res.data.result === true) {
+                        layer.msg('更新成功！');
+                        $('input').each(function () {
+                            $(this).attr('disabled', true);
+                        });
+                        console.log('succeed');
+                    } else {
+                        $('#waring_msg').html('&#10006; 模型更新出错').show();
+                    }
+                },
             });
-            console.log("succeed")
-          } else {
-            $('#waring_msg').html('&#10006; 模型更新出错').show();
-          }
-        }
-      })
-      return false;
+            return false;
+        });
+
+        form.on('submit(edit_btn)', function () {
+            $('input').each(function () {
+                $(this).attr('disabled', false);
+            });
+            return false;
+        });
     });
 
-    form.on('submit(edit_btn)', function() {
-      $('input').each(function() {
-        $(this).attr('disabled', false);
-      });
-      return false;
-    });
-  });
-
-  function sum(data) {
-    return parseFloat(data.w_outCallCountToday) +
-        parseFloat(data.w_callFromSameNumToday) +
-        parseFloat(data.w_aveCallDur7Days) +
-        parseFloat(data.w_switchRate7Days) +
-        parseFloat(data.w_answerRate7Days);
-  }
+    function sum(data) {
+        return parseFloat(data.w_outCallCountToday) +
+            parseFloat(data.w_callFromSameNumToday) +
+            parseFloat(data.w_aveCallDur7Days) +
+            parseFloat(data.w_switchRate7Days) +
+            parseFloat(data.w_answerRate7Days);
+    }
 </script>
 </html>

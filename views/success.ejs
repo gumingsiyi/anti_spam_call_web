@@ -4,76 +4,100 @@
     <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="//unpkg.com/layui@2.6.8/dist/css/layui.css">
     <script src="//unpkg.com/layui@2.6.8/dist/layui.js"></script>
-    <title>Welcome</title>
+    <title>防骚扰 - 模拟测试</title>
 </head>
 <body>
 <% include top/top.ejs %>
-<div class="layui-container">
-    <h1 id="head_name"></h1>
-    <p>Welcome to this page</p>
-    <p>token is: </p>
-    <p id="token_value"></p>
-    <button type="button" class="layui-btn layui-btn-radius" id="token_test_btn">token测试</button>
-    <button type="button" class="layui-btn layui-btn-radius" id="get_test_btn">get测试</button>
-    <button type="button" class="layui-btn layui-btn-radius" id="config_btn">模型设置</button>
-    <button type="button" class="layui-btn layui-btn-radius" id="sim_call_btn">模拟拨打</button>
+<div class="layui-container" style="text-align: center">
+    <div class="layui-row" style="padding: 5px">
+        <button type="button" style="width: 100px" class="layui-btn layui-btn-normal" id="token_test_btn">token测试
+        </button>
+    </div>
+    <div class="layui-row" style="padding: 5px">
+        <button type="button" style="width: 100px" class="layui-btn layui-btn-normal" id="get_test_btn">get测试</button>
+    </div>
+    <div class="layui-row" style="padding: 5px">
+        <button type="button" style="width: 100px" class="layui-btn layui-btn-normal" id="config_btn">模型设置</button>
+    </div>
+    <div class="layui-row" style="padding: 5px">
+        <h3>主叫号码 => 被叫号码</h3>
+    </div>
+    <div class="layui-row" style="padding: 5px">
+        <button type="button" style="width: 100px" class="layui-btn layui-btn-normal" id="sim_call_btn">模拟拨打</button>
+    </div>
+    <div class="layui-row" style="padding: 5px">
+        <button type="button" style="width: 100px" class="layui-btn layui-btn-danger" id="reset_btn">重 置</button>
+    </div>
     <p id="token_result"></p>
     <p id="get_result"></p>
 </div>
 </body>
 <script>
-  document.getElementById('token_value').innerHTML = localStorage.getItem('token');
-  layui.use('jquery', function() {
-    let $ = layui.jquery;
-    $('#head_name').html(localStorage.getItem('nickname'));
-    $('#token_test_btn').on('click', function() {
-      $.ajax({
-        type: 'get',
-        url: 'http://<%= server %>/test/tokenTest',
-        headers: {token: localStorage.getItem('token')},
-        dataType: 'json',
-        success: function(res) {
-          if (res.code === 200) {
-            $('#token_result').html(res.data);
-          } else {
-            console.log(res);
-          }
-        },
-      });
+    layui.use('jquery', function () {
+        let $ = layui.jquery;
+        $('#head_name').html(localStorage.getItem('nickname'));
+        $('#token_test_btn').on('click', function () {
+            $.ajax({
+                type: 'get',
+                url: 'http://<%= server %>/test/tokenTest',
+                headers: {token: localStorage.getItem('token')},
+                dataType: 'json',
+                success: function (res) {
+                    if (res.code === 200) {
+                        $('#token_result').html(res.data);
+                    } else {
+                        console.log(res);
+                    }
+                },
+            });
+        });
+        $('#get_test_btn').on('click', function () {
+            $.ajax({
+                type: 'get',
+                url: 'http://<%= server %>/test/getTest?s1=hello',
+                headers: {token: localStorage.getItem('token')},
+                dataType: 'json',
+                success: function (res) {
+                    console.log(res);
+                    if (res.code === 200) {
+                        $('#get_result').html(res.data);
+                    } else {
+                        console.log(res);
+                    }
+                },
+            });
+        });
+        $('#config_btn').on('click', function () {
+            window.location.href = '/base_config';
+        });
+        $('#sim_call_btn').on('click', function () {
+            $.ajax({
+                type: 'get',
+                url: 'http://<%= server %>/simulator/phoneCall',
+                headers: {token: localStorage.getItem('token')},
+                success: function (res) {
+                    if (res.code === 200) {
+                        $('#token_result').html(res.data);
+                    } else {
+                        console.log(res);
+                    }
+                },
+            });
+        });
+        $('#reset_btn').on('click', function () {
+            $.ajax({
+                type: 'get',
+                url: 'http://<%= server %>/simulator/reset',
+                headers: {token: localStorage.getItem('token')},
+                success: function (res) {
+                    if (res.code === 200) {
+                        $('#token_result').html(res.data);
+                    } else {
+                        console.log(res);
+                    }
+                },
+            });
+        });
     });
-    $('#get_test_btn').on('click', function() {
-      $.ajax({
-        type: 'get',
-        url: 'http://<%= server %>/test/getTest?s1=hello',
-        headers: {token: localStorage.getItem('token')},
-        dataType: 'json',
-        success: function(res) {
-          console.log(res);
-          if (res.code === 200) {
-            $('#get_result').html(res.data);
-          } else {
-            console.log(res);
-          }
-        },
-      });
-    });
-    $('#config_btn').on('click', function() {
-      window.location.href='/base_config'
-    })
-    $('#sim_call_btn').on('click', function() {
-      $.ajax({
-        type: 'get',
-        url: 'http://<%= server %>/simulator/phoneCall',
-        headers: {token: localStorage.getItem('token')},
-        success: function(res) {
-          if (res.code === 200) {
-            $('#token_result').html(res.data);
-          } else {
-            console.log(res);
-          }
-        },
-      });
-    })
-  });
 </script>
 </html>
