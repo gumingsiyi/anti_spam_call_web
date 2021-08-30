@@ -1,0 +1,49 @@
+<div class="layui-row">
+    <div class="layui-col-md6" style="width: 300px;  margin-left: 60px; margin-right: 50px; margin-top: 30px">
+        <div class="layui-row" style="font-weight: bold"><h3>黑名单</h3></div>
+        <div class="layui-row" style="max-height: 500px; overflow: auto; margin-top: 10px">
+            <table id="blackList" class="layui-table">
+            </table>
+        </div>
+    </div>
+    <div class="layui-col-md6" style="width: 300px;  margin-left: 60px; margin-right: 50px; margin-top: 30px">
+        <div class="layui-row" style="font-weight: bold"><h3>白名单</h3></div>
+        <div class="layui-row" style="max-height: 500px; overflow: auto; margin-top: 10px">
+            <table id="whiteList" class="layui-table">
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+    layui.use(function () {
+        let $ = layui.jquery;
+        $.ajax({
+            type: 'get',
+            url: "http://<%= server_host %>/admin/getBlackList?num=18996478090",
+            headers: {token: localStorage.getItem('token')},
+            success: function (res) {
+                if (res.code === 200) {
+                    console.log(res.data)
+                    for (let key in res.data) {
+                        $('#blackList').append('<tr><td>' + res.data[key] + '</td></tr>')
+                    }
+                }
+            },
+        });
+        $.ajax({
+            type: 'get',
+            url: "http://<%= server_host %>/admin/getWhiteList?num=18996478090",
+            headers: {token: localStorage.getItem('token')},
+            success: function (res) {
+                if (res.code === 200) {
+                    if (res.code === 200) {
+                        console.log(res.data)
+                        for (let key in res.data) {
+                            $('#whiteList').append('<tr><td>' + res.data[key] + '</td></tr>')
+                        }
+                    }
+                }
+            },
+        });
+    });
+</script>

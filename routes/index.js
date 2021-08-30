@@ -15,7 +15,7 @@ module.exports = function(app) {
     res.render('adminlogin', { server_host: server_host });
   });
   app.get('/success', function (req, res) {
-    res.render('success', { server: server_host});
+    res.render('success', { server_host: server_host});
   });
   app.get('/base_config' ,function(req, res) {
     res.render('baseModelConfig', { server_host: server_host })

@@ -9,27 +9,29 @@
 <body>
 <% include top/top.ejs %>
 <div class="layui-container" style="text-align: center">
-    <div class="layui-row" style="padding: 5px">
-        <button type="button" style="width: 100px" class="layui-btn layui-btn-normal" id="token_test_btn">token测试
-        </button>
+    <div class="layui-col-md3">
+        <div class="layui-row" style="padding: 5px">
+            <button type="button" style="width: 100px" class="layui-btn layui-btn-normal" id="token_test_btn">token测试</button>
+        </div>
+
+        <div class="layui-row" style="padding: 5px">
+            <button type="button" style="width: 100px" class="layui-btn layui-btn-normal" id="config_btn">模型设置</button>
+        </div>
+        <div class="layui-row" style="padding: 5px">
+            <h3>主叫号码 => 被叫号码</h3>
+        </div>
+        <div class="layui-row" style="padding: 5px">
+            <button type="button" style="width: 100px" class="layui-btn" id="sim_call_btn">模拟拨打</button>
+        </div>
+        <div class="layui-row" style="padding: 5px">
+            <button type="button" style="width: 100px" class="layui-btn layui-btn-danger" id="reset_btn">重 置</button>
+        </div>
+        <p id="token_result"></p>
+        <p id="get_result"></p>
     </div>
-    <div class="layui-row" style="padding: 5px">
-        <button type="button" style="width: 100px" class="layui-btn layui-btn-normal" id="get_test_btn">get测试</button>
+    <div class="layui-col-md9">
+        <% include details/baseModelDetails.ejs %>
     </div>
-    <div class="layui-row" style="padding: 5px">
-        <button type="button" style="width: 100px" class="layui-btn layui-btn-normal" id="config_btn">模型设置</button>
-    </div>
-    <div class="layui-row" style="padding: 5px">
-        <h3>主叫号码 => 被叫号码</h3>
-    </div>
-    <div class="layui-row" style="padding: 5px">
-        <button type="button" style="width: 100px" class="layui-btn layui-btn-normal" id="sim_call_btn">模拟拨打</button>
-    </div>
-    <div class="layui-row" style="padding: 5px">
-        <button type="button" style="width: 100px" class="layui-btn layui-btn-danger" id="reset_btn">重 置</button>
-    </div>
-    <p id="token_result"></p>
-    <p id="get_result"></p>
 </div>
 </body>
 <script>
@@ -39,28 +41,12 @@
         $('#token_test_btn').on('click', function () {
             $.ajax({
                 type: 'get',
-                url: 'http://<%= server %>/test/tokenTest',
+                url: 'http://<%= server_host %>/test/tokenTest',
                 headers: {token: localStorage.getItem('token')},
                 dataType: 'json',
                 success: function (res) {
                     if (res.code === 200) {
-                        $('#token_result').html(res.data);
-                    } else {
-                        console.log(res);
-                    }
-                },
-            });
-        });
-        $('#get_test_btn').on('click', function () {
-            $.ajax({
-                type: 'get',
-                url: 'http://<%= server %>/test/getTest?s1=hello',
-                headers: {token: localStorage.getItem('token')},
-                dataType: 'json',
-                success: function (res) {
-                    console.log(res);
-                    if (res.code === 200) {
-                        $('#get_result').html(res.data);
+                        layer.msg("TOKEN 测试通过")
                     } else {
                         console.log(res);
                     }
@@ -73,11 +59,11 @@
         $('#sim_call_btn').on('click', function () {
             $.ajax({
                 type: 'get',
-                url: 'http://<%= server %>/simulator/phoneCall',
+                url: 'http://<%= server_host %>/simulator/phoneCall',
                 headers: {token: localStorage.getItem('token')},
                 success: function (res) {
                     if (res.code === 200) {
-                        $('#token_result').html(res.data);
+                        layer.msg("模拟拨打 主叫 => 被叫")
                     } else {
                         console.log(res);
                     }
@@ -87,11 +73,11 @@
         $('#reset_btn').on('click', function () {
             $.ajax({
                 type: 'get',
-                url: 'http://<%= server %>/simulator/reset',
+                url: 'http://<%= server_host %>/simulator/reset',
                 headers: {token: localStorage.getItem('token')},
                 success: function (res) {
                     if (res.code === 200) {
-                        $('#token_result').html(res.data);
+                        layer.msg("重置数据")
                     } else {
                         console.log(res);
                     }
