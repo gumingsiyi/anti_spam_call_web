@@ -1,9 +1,22 @@
-<div class="layui-row">
+<div class="layui-row" style="background-color: #FAFAFA;padding: 20px; margin-top: 20px">
     <div class="layui-col-md6" style="width: 300px;  margin-left: 60px; margin-right: 50px; margin-top: 30px">
         <div class="layui-row" style="font-weight: bold"><h3>黑名单</h3></div>
         <div class="layui-row" style="max-height: 500px; overflow: auto; margin-top: 10px">
             <table id="blackList" class="layui-table">
             </table>
+        </div>
+        <hr>
+        <div class="layui-row">
+            <label for="black_num"></label>
+            <input type="text" id="black_num" class="layui-input" style="border-top:0;border-left:0;border-right:0; background-color: #FAFAFA;" placeholder="输入或双击号码">
+        </div>
+        <div class="layui-row" style="margin-top: 5px; text-align: center">
+            <div class="layui-col-xs3"  style="margin-left: 10px; margin-top: 10px">
+            <button class="layui-btn layui-btn-radius" id="black_add" style="text-align: center; font-size: 14px; background-color: #2D71DB; font-weight: lighter">添加</button>
+            </div>
+            <div class="layui-col-xs3"  style="margin-left: 10px; margin-top: 10px">
+            <button class="layui-btn layui-btn-primary layui-border-red layui-btn-radius" id="black_remove" style="text-align: center; font-size: 14px; font-weight: lighter">删除</button>
+            </div>
         </div>
     </div>
     <div class="layui-col-md6" style="width: 300px;  margin-left: 60px; margin-right: 50px; margin-top: 30px">
@@ -12,38 +25,135 @@
             <table id="whiteList" class="layui-table">
             </table>
         </div>
+        <hr>
+        <div class="layui-row">
+            <label for="white_num"></label>
+            <input type="text" id="white_num" class="layui-input" style="border-top:0;border-left:0;border-right:0; background-color: #FAFAFA;" placeholder="输入或双击号码">
+        </div>
+        <div class="layui-row" style="margin-top: 5px; text-align: center">
+            <div class="layui-col-xs3" style="margin-left: 10px; margin-top: 10px">
+                <button class="layui-btn layui-btn-radius" id="white_add" style="text-align: center; font-size: 14px; background-color: #2D71DB; font-weight: lighter">添加</button>
+            </div>
+            <div class="layui-col-xs3" style="margin-left: 15px; margin-top: 10px">
+                <button class="layui-btn layui-btn-primary layui-border-red layui-btn-radius" id="white_remove" style="text-align: center; font-size: 14px; font-weight: lighter">删除</button>
+            </div>
+        </div>
     </div>
 </div>
 <script>
     layui.use(function () {
         let $ = layui.jquery;
-        $.ajax({
-            type: 'get',
-            url: "http://<%= server_host %>/admin/getBlackList?num=18996478090",
-            headers: {token: localStorage.getItem('token')},
-            success: function (res) {
-                if (res.code === 200) {
-                    console.log(res.data)
-                    for (let key in res.data) {
-                        $('#blackList').append('<tr><td>' + res.data[key] + '</td></tr>')
-                    }
-                }
-            },
-        });
-        $.ajax({
-            type: 'get',
-            url: "http://<%= server_host %>/admin/getWhiteList?num=18996478090",
-            headers: {token: localStorage.getItem('token')},
-            success: function (res) {
-                if (res.code === 200) {
+        let white = $('#whiteList');
+        let black = $('#blackList');
+
+        let black_input = $('#black_num');
+        let white_input = $('#white_num')
+
+        let refresh_black_list = function () {
+            $.ajax({
+                type: 'get',
+                url: "http://<%= server_host %>/admin/getBlackList?num=18996478090",
+                headers: {token: localStorage.getItem('token')},
+                success: function (res) {
                     if (res.code === 200) {
-                        console.log(res.data)
+                        black.html("");
+                        //console.log(res.data);
                         for (let key in res.data) {
-                            $('#whiteList').append('<tr><td>' + res.data[key] + '</td></tr>')
+                            black.append('<tr><td>' + res.data[key] + '</td></tr>')
                         }
                     }
-                }
-            },
+                },
+            });
+        }
+        let refresh_white_list = function () {
+            $.ajax({
+                type: 'get',
+                url: "http://<%= server_host %>/admin/getWhiteList?num=18996478090",
+                headers: {token: localStorage.getItem('token')},
+                success: function (res) {
+                    if (res.code === 200) {
+                        //console.log(res.data)
+                        white.html("");
+                        for (let key in res.data) {
+                            white.append('<tr><td>' + res.data[key] + '</td></tr>')
+                        }
+                    }
+                },
+            });
+        }
+        refresh_black_list();
+        refresh_white_list();
+
+        $('#black_add').on('click', function () {
+            $.ajax({
+                type: 'get',
+                url: "http://<%= server_host %>/admin/blackAdd?from=" + black_input.val() + "&to=18996478090",
+                headers: {token: localStorage.getItem('token')},
+                success: function (res) {
+                    if (res.code === 200) {
+                        refresh_black_list();
+                        refresh_white_list();
+                        black_input.val("");
+                    }
+                },
+            });
+        });
+
+        $('#black_remove').on('click', function () {
+            $.ajax({
+                type: 'get',
+                url: "http://<%= server_host %>/admin/blackRemove?from=" + black_input.val() + "&to=18996478090",
+                headers: {token: localStorage.getItem('token')},
+                success: function (res) {
+                    if (res.code === 200) {
+                        refresh_black_list();
+                        refresh_white_list();
+                        black_input.val("");
+                    }
+                },
+            });
+
+        });
+
+        $('#white_add').on('click', function () {
+            $.ajax({
+                type: 'get',
+                url: "http://<%= server_host %>/admin/whiteAdd?from=" + white_input.val() + "&to=18996478090",
+                headers: {token: localStorage.getItem('token')},
+                success: function (res) {
+                    if (res.code === 200) {
+                        refresh_black_list();
+                        refresh_white_list();
+                        white_input.val("");
+                    }
+                },
+            });
+        });
+
+        $('#white_remove').on('click', function () {
+            $.ajax({
+                type: 'get',
+                url: "http://<%= server_host %>/admin/whiteRemove?from=" + white_input.val() + "&to=18996478090",
+                headers: {token: localStorage.getItem('token')},
+                success: function (res) {
+                    if (res.code === 200) {
+                        refresh_black_list();
+                        refresh_white_list();
+                        white_input.val("");
+                    }
+                },
+            });
+        });
+
+        black.on('dblclick', function (e) {
+            let num = e.target.innerHTML;
+            black_input.val(num)
+            //console.log(e.target.innerHTML)
+        });
+
+        white.on('dblclick', function (e) {
+            let num = e.target.innerHTML;
+            white_input.val(num)
         });
     });
 </script>

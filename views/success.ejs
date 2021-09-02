@@ -8,26 +8,25 @@
 </head>
 <body>
 <% include top/top.ejs %>
-<div class="layui-container" style="text-align: center">
+<div class="layui-container" style="text-align: center; margin: 20px">
     <div class="layui-col-md3">
-        <div class="layui-row" style="padding: 5px">
-            <button type="button" style="width: 100px" class="layui-btn layui-btn-normal" id="token_test_btn">token测试</button>
+        <div class="layui-row" style="padding: 5px; margin-top: 45px; text-align: left">
+            <div style="font-weight: bold; font-size: 16px">主叫号码: 188xxxxxxxx</div>
+            <div style="font-weight: bold;  font-size: 16px">被叫号码: 139xxxxxxxx</div>
+        </div>
+        <div class="layui-row" style="padding: 10px">
+            <button type="button" style="font-weight: lighter;" class="layui-btn layui-btn-radius layui-btn-fluid" id="sim_call_btn">模拟拨打</button>
+        </div>
+        <div class="layui-row" style="padding: 10px">
+            <button type="button" style="font-weight: lighter;" class="layui-btn layui-btn-radius layui-btn-fluid" id="sim_auth_btn">模拟授信</button>
+        </div>
+        <div class="layui-row" style="padding: 10px">
+            <button type="button" style="font-weight: lighter;" class="layui-btn layui-btn-radius layui-btn-fluid" id="sim_block_btn">模拟拉黑</button>
+        </div>
+        <div class="layui-row" style="padding: 10px">
+            <button type="button" style="font-weight: lighter;" class="layui-btn layui-btn-primary layui-border-red layui-btn-radius layui-btn-fluid" id="reset_btn">重 置</button>
         </div>
 
-        <div class="layui-row" style="padding: 5px">
-            <button type="button" style="width: 100px" class="layui-btn layui-btn-normal" id="config_btn">模型设置</button>
-        </div>
-        <div class="layui-row" style="padding: 5px">
-            <h3>主叫号码 => 被叫号码</h3>
-        </div>
-        <div class="layui-row" style="padding: 5px">
-            <button type="button" style="width: 100px" class="layui-btn" id="sim_call_btn">模拟拨打</button>
-        </div>
-        <div class="layui-row" style="padding: 5px">
-            <button type="button" style="width: 100px" class="layui-btn layui-btn-danger" id="reset_btn">重 置</button>
-        </div>
-        <p id="token_result"></p>
-        <p id="get_result"></p>
     </div>
     <div class="layui-col-md9">
         <% include details/baseModelDetails.ejs %>
@@ -63,7 +62,35 @@
                 headers: {token: localStorage.getItem('token')},
                 success: function (res) {
                     if (res.code === 200) {
-                        layer.msg("模拟拨打 主叫 => 被叫")
+                        layer.msg(res.data + " 主叫 => 被叫")
+                    } else {
+                        console.log(res);
+                    }
+                },
+            });
+        });
+        $('#sim_auth_btn').on('click', function () {
+            $.ajax({
+                type: 'get',
+                url: 'http://<%= server_host %>/simulator/authorize',
+                headers: {token: localStorage.getItem('token')},
+                success: function (res) {
+                    if (res.code === 200) {
+                        layer.msg("主叫加入被叫白名单")
+                    } else {
+                        console.log(res);
+                    }
+                },
+            });
+        });
+        $('#sim_block_btn').on('click', function () {
+            $.ajax({
+                type: 'get',
+                url: 'http://<%= server_host %>/simulator/block',
+                headers: {token: localStorage.getItem('token')},
+                success: function (res) {
+                    if (res.code === 200) {
+                        layer.msg("主叫加入被叫黑名单")
                     } else {
                         console.log(res);
                     }
