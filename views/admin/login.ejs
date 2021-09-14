@@ -8,7 +8,7 @@
     <title>防骚扰-管理员登录</title>
 </head>
 <body>
-<% include top/top.ejs %>
+<% include ../top/admin_top.ejs %>
 <div class="layui-container">
     <div class="layui-row">
         <h1 style="margin-left:110px; margin-top: 100px;">请登录。</h1>
@@ -70,7 +70,7 @@
                         localStorage.setItem("token", res.data['token'])
                         localStorage.setItem("username", res.data['username'])
                         localStorage.setItem("nickname", res.data['nickname'])
-                        window.location.href = "/success"
+                        window.location.href = "/admin/success"
                     } else {
                         $('#pwd_waring').show();
                     }
