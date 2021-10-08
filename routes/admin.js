@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express.Router();
 
-let server_host = '10.70.156.105:8080';
-//let server_host = 'localhost:8080';
+//let server_host = '10.70.156.105:8080';
+let server_host = 'localhost:8080';
 
 router.get('/', function (req, res) {
   res.render('index', { server: 'Express' });

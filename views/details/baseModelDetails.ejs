@@ -10,16 +10,38 @@
             </tr>
             </thead>
             <tbody>
-            <td style="font-size: 10px">当天呼叫次数 <br> (测试主叫 -> 测试被叫)</td>
-            <td>
-                <label id="a1">...</label>
-            </td>
-            <td>
-                <label id="a2">...</label>
-            </td>
-            <td id="a3">
-                1
-            </td>
+            <tr>
+                <td style="font-size: 10px">当天呼叫次数 <br> (测试主叫 -> 测试被叫)</td>
+                <td>
+                    <label id="a1">...</label>
+                </td>
+                <td>
+                    <label id="a2">...</label>
+                </td>
+                <td id="a3">
+                    1
+                </td>
+            </tr>
+            <tr>
+                <td>当天外呼次数</td>
+                <td><label>3</label></td>
+                <td><label>4</label></td>
+            </tr>
+            <tr>
+                <td>7天平均通话时长(s)</td>
+                <td><label>30</label></td>
+                <td><label>28</label></td>
+            </tr>
+            <tr>
+                <td>7天平均接通率</td>
+                <td><label>0.98</label></td>
+                <td><label>1.00</label></td>
+            </tr>
+            <tr>
+                <td>7天平均接听率</td>
+                <td><label>0.4</label></td>
+                <td><label>1.00</label></td>
+            </tr>
             </tbody>
         </table>
     </form>
@@ -57,7 +79,23 @@
                 },
             });
         }
+        let stop_refresh = function () {
+            window.clearInterval(interval)
+            $('#refresh_icon').hide()
+            $('#resume_icon').show()
+        };
+
         getCallCount();
+
+        let start_refresh = function () {
+            window.clearInterval(interval)
+            interval = window.setInterval(getCallCount, 1000)
+            $('#refresh_icon').show()
+            $('#resume_icon').hide()
+        };
+
+        start_refresh();
+
         $.ajax({
             type: 'get',
             url: "http://<%= server_host %>/model/getBaseModel",
@@ -69,16 +107,7 @@
                 }
             },
         });
-        $('#start').on("click", function () {
-            window.clearInterval(interval)
-            interval = window.setInterval(getCallCount, 1000)
-            $('#refresh_icon').show()
-            $('#resume_icon').hide()
-        })
-        $('#resume').on("click", function () {
-            window.clearInterval(interval)
-            $('#refresh_icon').hide()
-            $('#resume_icon').show()
-        })
+        $('#start').on("click", start_refresh)
+        $('#resume').on("click", stop_refresh)
     });
 </script>
