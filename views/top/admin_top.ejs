@@ -1,35 +1,30 @@
 <!DOCTYPE html>
 <body>
-<div class="layui-header header header-doc layui-row">
-    <div class="layui-col-xs4">
-        <ul class="layui-nav" lay-filter="" style="border-radius: 0;padding-left: 100px; background-color: #303030;">
-            <div class="layui-nav-item" style="text-align: center">
-                <img src="/images/umbrella.png" alt="" style="height: 20px">
-            </div>
-        </ul>
-    </div>
-    <div class="layui-col-xs8">
-        <ul class="layui-nav" lay-filter="" style="text-align: right; border-radius: 0;padding-right: 100px; background-color: #303030">
-            <li id="login_status" class="layui-nav-item">
-                <a id="username" href="" style="font-size: 12px;"></a>
-                <dl class="layui-nav-child" style="text-align: center; border-radius: 10px"> <!-- 二级菜单 -->
-                    <dd><a href="/admin/base_config" style="font-size: 12px;">基础模型设置</a></dd>
-                    <dd><a href="/admin/details" style="font-size: 12px;">模拟监控信息</a></dd>
-                    <dd><a href="/admin/success" style="font-size: 12px;">模拟拨打</a></dd>
-                    <hr style="margin: 7px; background-color: #d2d2d7">
-                    <dd><a id="logout_btn" href="" style="font-size: 12px;">注销</a></dd>
-                </dl>
-            </li>
-        </ul>
-    </div>
-</div>
+
+<ul class="layui-nav" lay-filter="" style="padding-left: 100px; background-color: #303030;">
+    <li class="layui-nav-item" style="text-align: center">
+        <a href=""><img src="/images/umbrella.png" alt="" style="height: 20px"> 防骚扰管理平台</a>
+    </li>
+
+    <li id="login_status" class="layui-nav-item">
+        <a id="username" href="" style="font-size: 12px;"></a>
+        <dl class="layui-nav-child" style="text-align: center; border-radius: 10px"> <!-- 二级菜单 -->
+            <dd><a href="/admin/base_config" style="font-size: 12px;">基础模型设置</a></dd>
+            <dd><a href="/admin/details" style="font-size: 12px;">模拟监控信息</a></dd>
+            <dd><a href="/admin/success" style="font-size: 12px;">模拟拨打</a></dd>
+            <hr style="margin: 7px; background-color: #d2d2d7">
+            <dd><a id="logout_btn" href="" style="font-size: 12px;">注销</a></dd>
+        </dl>
+    </li>
+</ul>
+
 </body>
 <script>
     layui.use('jquery', function () {
         let $ = layui.jquery;
         if (localStorage.getItem('token') === null) {
             $('#login_status').html('<a id="login_status" href="">未登录</a>')
-            if (window.location.pathname !== '/login') {
+            if (!window.location.pathname.indexOf('login')) {
                 window.location.href = '/admin/login'
             }
         } else {
